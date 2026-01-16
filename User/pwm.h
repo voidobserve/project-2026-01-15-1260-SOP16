@@ -1,5 +1,5 @@
-#ifndef _PWM_H
-#define _PWM_H
+#ifndef __PWM_H__
+#define __PWM_H__
 
 #include "my_config.h"
 #include "include.h"
@@ -15,6 +15,12 @@ enum
     PWM_DUTY_30_PERCENT = 1800,  // 30%占空比
     PWM_DUTY_25_PERCENT = 1500,  // 25%占空比
 };
+
+// 定时，限制占空比的时间（用于上电多久之后，限制最大的占空比），单位：ms
+#define SCHEDULE_TIME_TO_LIMIT_PWM ((u32)1 * 60 * 60 * 1000)
+// #define SCHEDULE_TIME_TO_LIMIT_PWM ((u32)30 * 1000) // 测试时使用
+// 时间到来之后，要限制的最大占空比值
+#define SCHEDULE_TIME_TO_LIMIT_PWM_VAL ((u16)PWM_DUTY_80_PERCENT) 
 
 // 由温度限制的PWM占空比 （对所有PWM通道都生效）
 extern volatile u16 limited_pwm_duty_due_to_temp;
