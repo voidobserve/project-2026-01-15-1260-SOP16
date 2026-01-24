@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   PWM                                                               01/16/2026 15:14:11 PAGE 1   
+C51 COMPILER V9.60.7.0   PWM                                                               01/24/2026 17:50:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PWM
@@ -36,37 +36,39 @@ line level    source
              -�空比
   19          volatile u16 adjust_pwm_channel_1_duty = MAX_PWM_DUTY;        // pwm_channle_1 要调整到的占空比
   20          
-  21          #define STMR0_PEROID_VAL (SYSCLK / 8000 - 1)
-  22          #define STMR1_PEROID_VAL (SYSCLK / 8000 - 1)
-  23          void pwm_init(void)
-  24          {
-  25   1          STMR_CNTCLR |= STMR_0_CNT_CLR(0x1); // 清空计数值
-  26   1      
-  27   1          STMR0_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
-  28   1          STMR0_PRH = STMR_PRD_VAL_H((STMR0_PEROID_VAL >> 8) & 0xFF); // 周期值
-  29   1          STMR0_PRL = STMR_PRD_VAL_L((STMR0_PEROID_VAL >> 0) & 0xFF);
-  30   1          STMR0_CMPAH = STMR_CMPA_VAL_H(((0) >> 8) & 0xFF); // 比较值
-  31   1          STMR0_CMPAL = STMR_CMPA_VAL_L(((0) >> 0) & 0xFF); // 比较值
-  32   1          STMR_PWMVALA |= STMR_0_PWMVALA(0x1);
-  33   1      
-  34   1          STMR_CNTMD |= STMR_0_CNT_MODE(0x1); // 连续计数模式
-  35   1          STMR_LOADEN |= STMR_0_LOAD_EN(0x1); // 自动装载使能
-  36   1          STMR_CNTCLR |= STMR_0_CNT_CLR(0x1); //
-  37   1          STMR_CNTEN |= STMR_0_CNT_EN(0x1);   // 使能
-  38   1          STMR_PWMEN |= STMR_0_PWM_EN(0x1);   // PWM输出使能
-  39   1      
-  40   1          P1_MD1 &= ~GPIO_P16_MODE_SEL(0x03); // P16 14脚
-  41   1          P1_MD1 |= GPIO_P16_MODE_SEL(0x01);
-  42   1          P1_MD1 &= ~GPIO_P14_MODE_SEL(0x03); // P14 16脚
-  43   1          P1_MD1 |= GPIO_P14_MODE_SEL(0x01);
-  44   1          FOUT_S14 = GPIO_FOUT_AF_FUNC;      // AF功能输出
-  45   1          FOUT_S16 = GPIO_FOUT_STMR0_PWMOUT; // stmr0_pwmout
-  46   1      
-C51 COMPILER V9.60.7.0   PWM                                                               01/16/2026 15:14:11 PAGE 2   
+  21          void pwm_init(void)
+  22          {
+  23   1          STMR_CNTCLR |= STMR_0_CNT_CLR(0x1); // 清空计数值
+  24   1      
+  25   1          // STMR0_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+  26   1          STMR0_PSC = STMR_PRESCALE_VAL(0);                           // 预分频（填入的值范围：0~254�
+             -��对应1~255分频）
+  27   1          STMR0_PRH = STMR_PRD_VAL_H((STMR0_PEROID_VAL >> 8) & 0xFF); // 周期值
+  28   1          STMR0_PRL = STMR_PRD_VAL_L((STMR0_PEROID_VAL >> 0) & 0xFF);
+  29   1          STMR0_CMPAH = STMR_CMPA_VAL_H(((0) >> 8) & 0xFF); // 比较值
+  30   1          STMR0_CMPAL = STMR_CMPA_VAL_L(((0) >> 0) & 0xFF); // 比较值
+  31   1          STMR_PWMVALA |= STMR_0_PWMVALA(0x1);
+  32   1      
+  33   1          STMR_CNTMD |= STMR_0_CNT_MODE(0x1); // 连续计数模式
+  34   1          STMR_LOADEN |= STMR_0_LOAD_EN(0x1); // 自动装载使能
+  35   1          STMR_CNTCLR |= STMR_0_CNT_CLR(0x1); //
+  36   1          STMR_CNTEN |= STMR_0_CNT_EN(0x1);   // 使能
+  37   1          STMR_PWMEN |= STMR_0_PWM_EN(0x1);   // PWM输出使能
+  38   1      
+  39   1          P1_MD1 &= ~GPIO_P16_MODE_SEL(0x03); // P16 14脚
+  40   1          P1_MD1 |= GPIO_P16_MODE_SEL(0x01);
+  41   1          P1_MD1 &= ~GPIO_P14_MODE_SEL(0x03); // P14 16脚
+  42   1          P1_MD1 |= GPIO_P14_MODE_SEL(0x01);
+  43   1          FOUT_S14 = GPIO_FOUT_AF_FUNC;      // AF功能输出
+  44   1          FOUT_S16 = GPIO_FOUT_STMR0_PWMOUT; // stmr0_pwmout
+  45   1      
+C51 COMPILER V9.60.7.0   PWM                                                               01/24/2026 17:50:51 PAGE 2   
 
-  47   1          // P15 15脚 作为第2路PWM输出
-  48   1          STMR_CNTCLR |= STMR_1_CNT_CLR(0x1);                         // 清空计数值
-  49   1          STMR1_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+  46   1          // P15 15脚 作为第2路PWM输出
+  47   1          STMR_CNTCLR |= STMR_1_CNT_CLR(0x1); // 清空计数值
+  48   1          // STMR1_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+  49   1          STMR1_PSC = STMR_PRESCALE_VAL(0);                           // 预分频（填入的值范围：0~254�
+             -��对应1~255分频）
   50   1          STMR1_PRH = STMR_PRD_VAL_H((STMR1_PEROID_VAL >> 8) & 0xFF); // 周期值
   51   1          STMR1_PRL = STMR_PRD_VAL_L((STMR1_PEROID_VAL >> 0) & 0xFF);
   52   1          STMR1_CMPAH = STMR_CMPA_VAL_H(((0) >> 8) & 0xFF); // 比较值 (清空比较值)
@@ -124,10 +126,10 @@ line level    source
  102          
  103          /**
  104           * @brief 获取第一路PWM的运行状态
+C51 COMPILER V9.60.7.0   PWM                                                               01/24/2026 17:50:51 PAGE 3   
+
  105           *
  106           * @return u8 0--pwm关闭，1--pwm开启
-C51 COMPILER V9.60.7.0   PWM                                                               01/16/2026 15:14:11 PAGE 3   
-
  107           */
  108          u8 get_pwm_channel_0_status(void)
  109          {
@@ -188,10 +190,10 @@ line level    source
  164          void pwm_channel_1_disable(void)
  165          {
  166   1          // 直接输出0%的占空比，可能会有些跳动，需要将对应的引脚配置回输出模式
+C51 COMPILER V9.60.7.0   PWM                                                               01/24/2026 17:50:51 PAGE 4   
+
  167   1          STMR_PWMEN &= ~(0x01 << 1); // 不使能PWM1的输出
  168   1      
-C51 COMPILER V9.60.7.0   PWM                                                               01/16/2026 15:14:11 PAGE 4   
-
  169   1      #if USE_MY_TEST_PIN
                   FOUT_S05 = GPIO_FOUT_AF_FUNC; //;
                   P05 = 1;                      // 高电平为关灯
@@ -252,10 +254,10 @@ line level    source
              -��
  222   1          if (tmp_pwm_duty >= limited_pwm_duty_due_to_fan_err)
  223   1          {
+C51 COMPILER V9.60.7.0   PWM                                                               01/24/2026 17:50:51 PAGE 5   
+
  224   2              tmp_pwm_duty = limited_pwm_duty_due_to_fan_err;
  225   2          }
-C51 COMPILER V9.60.7.0   PWM                                                               01/16/2026 15:14:11 PAGE 5   
-
  226   1      
  227   1          return tmp_pwm_duty; // 返回经过线控调光限制之后的、最终的目标占空比
  228   1      }
@@ -268,7 +270,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    412    ----
+   CODE SIZE        =    410    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     18       2
    PDATA SIZE       =   ----    ----

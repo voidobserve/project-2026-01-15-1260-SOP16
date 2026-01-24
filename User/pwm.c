@@ -18,13 +18,12 @@ volatile u16 cur_pwm_channel_1_duty;                          // 当前设置的
 volatile u16 expect_adjust_pwm_channel_1_duty = MAX_PWM_DUTY; // 存放期望调节到的 pwm_channle_1 占空比
 volatile u16 adjust_pwm_channel_1_duty = MAX_PWM_DUTY;        // pwm_channle_1 要调整到的占空比
 
-#define STMR0_PEROID_VAL (SYSCLK / 8000 - 1)
-#define STMR1_PEROID_VAL (SYSCLK / 8000 - 1)
 void pwm_init(void)
 {
     STMR_CNTCLR |= STMR_0_CNT_CLR(0x1); // 清空计数值
 
-    STMR0_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+    // STMR0_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+    STMR0_PSC = STMR_PRESCALE_VAL(0);                           // 预分频（填入的值范围：0~254，对应1~255分频）
     STMR0_PRH = STMR_PRD_VAL_H((STMR0_PEROID_VAL >> 8) & 0xFF); // 周期值
     STMR0_PRL = STMR_PRD_VAL_L((STMR0_PEROID_VAL >> 0) & 0xFF);
     STMR0_CMPAH = STMR_CMPA_VAL_H(((0) >> 8) & 0xFF); // 比较值
@@ -45,8 +44,9 @@ void pwm_init(void)
     FOUT_S16 = GPIO_FOUT_STMR0_PWMOUT; // stmr0_pwmout
 
     // P15 15脚 作为第2路PWM输出
-    STMR_CNTCLR |= STMR_1_CNT_CLR(0x1);                         // 清空计数值
-    STMR1_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+    STMR_CNTCLR |= STMR_1_CNT_CLR(0x1); // 清空计数值
+    // STMR1_PSC = STMR_PRESCALE_VAL(0x07);                        // 预分频
+    STMR1_PSC = STMR_PRESCALE_VAL(0);                           // 预分频（填入的值范围：0~254，对应1~255分频）
     STMR1_PRH = STMR_PRD_VAL_H((STMR1_PEROID_VAL >> 8) & 0xFF); // 周期值
     STMR1_PRL = STMR_PRD_VAL_L((STMR1_PEROID_VAL >> 0) & 0xFF);
     STMR1_CMPAH = STMR_CMPA_VAL_H(((0) >> 8) & 0xFF); // 比较值 (清空比较值)
