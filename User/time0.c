@@ -5,8 +5,8 @@
 // u8 ms_cnt = 0;
 // volatile bit tmr0_flag = 0;
 
-static volatile u8 cnt_during_power_on = 0;       // 开机缓启动，调节pwm占空比时，使用到的计数值
-volatile bit flag_time_comes_during_power_on = 0; // 标志位，开机缓启动期间，调节时间到来
+static volatile u8 cnt_during_power_on = 0; // 开机缓启动，调节pwm占空比时，使用到的计数值
+// volatile bit flag_time_comes_during_power_on = 0; // 标志位，开机缓启动期间，调节时间到来
 
 /**
  * @brief 配置定时器TMR0，定时器默认关闭
@@ -67,21 +67,15 @@ void TIMR0_IRQHandler(void) interrupt TMR0_IRQn
     if (TMR0_CONH & TMR_PRD_PND(0x1))
     {
         TMR0_CONH |= TMR_PRD_PND(0x1); // 清除pending
+        // cnt_during_power_on++;
 
-        // ms_cnt++;
-        cnt_during_power_on++;
-
-        // if (ms_cnt >= 25)
+        // if (cnt_during_power_on >= 13) // 13ms
         // {
-        //     ms_cnt = 0;
-        //     // tmr0_flag = 1;
+        //     cnt_during_power_on = 0;
+        //     flag_time_comes_during_power_on = 1; // 开机缓启动期间，控制每次调节PWM占空比的时间
         // }
 
-        if (cnt_during_power_on >= 13) // 13ms
-        {
-            cnt_during_power_on = 0;
-            flag_time_comes_during_power_on = 1; // 开机缓启动期间，控制每次调节PWM占空比的时间
-        }
+        flag_time_comes_during_power_on = 1;
 
         if (rf_key_para.cur_scan_times < 255)
         {

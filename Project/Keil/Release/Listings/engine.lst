@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 17:50:52 PAGE 1   
+C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 18:01:54 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ENGINE
@@ -62,7 +62,7 @@ line level    source
   46   2              {
   47   3                  filter_buff[i] = adc_val;
   48   3              }
-C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 17:50:52 PAGE 2   
+C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 18:01:54 PAGE 2   
 
   49   2      
   50   2              for (i = 0; i < ARRAY_SIZE(filter_buff_2); i++)
@@ -126,7 +126,7 @@ line level    source
  108   4                          over_drive_status--;
  109   4                  }
  110   3              }
-C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 17:50:52 PAGE 3   
+C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 18:01:54 PAGE 3   
 
  111   2      
  112   2              // MY_DEBUG:
@@ -190,7 +190,7 @@ line level    source
  165   2              {
  166   3                  flag_is_pwm_sub_time_comes = 0;
  167   3      
-C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 17:50:52 PAGE 4   
+C51 COMPILER V9.60.7.0   ENGINE                                                            01/24/2026 18:01:54 PAGE 4   
 
  168   3                  if (flag_is_sub_power < 4)
  169   3                  {
@@ -239,7 +239,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    836    ----
+   CODE SIZE        =    837    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =    616       8
    PDATA SIZE       =   ----    ----

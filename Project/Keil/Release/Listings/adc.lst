@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 1   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC
@@ -62,7 +62,7 @@ line level    source
   50          {
   51   1      
   52   1          __EnableIRQ(ADC_IRQn); // 使能ADC中断
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 2   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 2   
 
   53   1          IE_EA = 1;             // 使能总中断
   54   1      
@@ -126,7 +126,7 @@ line level    source
              -��能信号
  104   3                          ADC_BIAS_EN(0x1) |                                              // 打开ADC偏置电�
              -��能使信号
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 3   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 3   
 
  105   3                          ADC_BIAS_SEL(0x1);                                              // 偏置电流：1x
  106   3      
@@ -190,7 +190,7 @@ line level    source
              -�于75摄氏度对应的电压值）
  162   2              {
  163   3                  cnt++;
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 4   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 4   
 
  164   3              }
  165   2              else
@@ -254,7 +254,7 @@ line level    source
  221   3      
  222   3                  return;
  223   3              }
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 5   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 5   
 
  224   2          }
  225   1      }
@@ -318,7 +318,7 @@ line level    source
  279   2      
  280   2              // 风扇工作异常，限制pwm输出，占空比不超过25%
  281   2              limited_pwm_duty_due_to_fan_err = PWM_DUTY_25_PERCENT;
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 6   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 6   
 
  282   2          }
  283   1      }
@@ -382,7 +382,7 @@ line level    source
  341   2              else if (ADC_STATUS_SEL_GET_TEMP == cur_adc_status)
  342   2              {
  343   3                  // 更新热敏电阻检测一端的ad值
-C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 17:50:51 PAGE 7   
+C51 COMPILER V9.60.7.0   ADC                                                               01/24/2026 18:01:53 PAGE 7   
 
  344   3                  adc_val_from_temp = adc_val;
  345   3                  // printf("3 temp scan done\n");

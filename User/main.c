@@ -20,15 +20,16 @@
 #include "include.h"
 #include <math.h>
 #include <stdio.h>
+#include "power_on.h"
 
-float step = 70;
-float mi; // 幂
+// float step = 70;
+// float mi; // 幂
 // float rus; // 10的幂次方
 // float r_ms = 0;
 // #define USER_BAUD (115200UL)
 // #define USER_UART_BAUD ((SYSCLK - USER_BAUD) / (USER_BAUD))
 
-volatile bit flag_is_in_power_on; // 是否处于开机缓启动
+// volatile bit flag_is_in_power_on; // 是否处于开机缓启动
 
 #if USE_MY_DEBUG // 打印串口配置
 
@@ -65,36 +66,36 @@ void my_debug_config(void)
 #endif // USE_MY_DEBUG // 打印串口配置
 
 // 开机缓启动，调节占空比：
-void adjust_pwm_duty_when_power_on(void)
-{
-    // if (jump_flag == 1)
-    // {
-    //     // break;
-    //     return
-    // }
-    // if (c_duty < 6000)
-    if (cur_pwm_channel_0_duty < MAX_PWM_DUTY &&
-        cur_pwm_channel_1_duty < MAX_PWM_DUTY)
-    {
-        mi = (step - 1) / (253 / 3) - 1;
-        step += 0.5;
-        // cur_pwm_channel_0_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
-        // cur_pwm_channel_1_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
-        cur_pwm_channel_0_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
-        cur_pwm_channel_1_duty = cur_pwm_channel_0_duty;
-    }
+// void adjust_pwm_duty_when_power_on(void)
+// {
+//     // if (jump_flag == 1)
+//     // {
+//     //     // break;
+//     //     return
+//     // }
+//     // if (c_duty < 6000)
+//     if (cur_pwm_channel_0_duty < MAX_PWM_DUTY &&
+//         cur_pwm_channel_1_duty < MAX_PWM_DUTY)
+//     {
+//         mi = (step - 1) / (253 / 3) - 1;
+//         step += 0.5;
+//         // cur_pwm_channel_0_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
+//         // cur_pwm_channel_1_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
+//         cur_pwm_channel_0_duty = pow(5, mi) * 60; // C 库函数 double pow(double x, double y) 返回 x 的 y 次幂
+//         cur_pwm_channel_1_duty = cur_pwm_channel_0_duty;
+//     }
 
-    if (cur_pwm_channel_0_duty >= MAX_PWM_DUTY ||
-        cur_pwm_channel_1_duty >= MAX_PWM_DUTY)
-    {
-        cur_pwm_channel_0_duty = MAX_PWM_DUTY;
-        cur_pwm_channel_1_duty = MAX_PWM_DUTY;
-    }
-    // printf("c_duty %d\n",c_duty);
+//     if (cur_pwm_channel_0_duty >= MAX_PWM_DUTY ||
+//         cur_pwm_channel_1_duty >= MAX_PWM_DUTY)
+//     {
+//         cur_pwm_channel_0_duty = MAX_PWM_DUTY;
+//         cur_pwm_channel_1_duty = MAX_PWM_DUTY;
+//     }
+//     // printf("c_duty %d\n",c_duty);
 
-    // delay_ms(16); // 每16ms调整一次PWM的脉冲宽度 ---- 校验码A488对应的时间
-    // delay_ms(11); // 16 * 0.666 约为10.656   ---- 校验码B5E3对应的时间
-}
+//     // delay_ms(16); // 每16ms调整一次PWM的脉冲宽度 ---- 校验码A488对应的时间
+//     // delay_ms(11); // 16 * 0.666 约为10.656   ---- 校验码B5E3对应的时间
+// }
 
 void main(void)
 {
@@ -171,7 +172,7 @@ void main(void)
     limited_pwm_duty_due_to_unstable_engine = MAX_PWM_DUTY;
 
 // ===================================================================
-#if 1 // 开机缓慢启动（PWM信号变化平缓）
+#if 0 // 开机缓慢启动（PWM信号变化平缓）
 
     P14 = 0; // 16脚先输出低电平
     // c_duty = 0;
@@ -232,6 +233,9 @@ void main(void)
 #endif //  USE_MY_DEBUG
     }
 #endif // 开机缓慢启动（PWM信号变化平缓）
+
+
+    power_on_handle();
 
     // 缓启动后，立即更新 adjust_duty 的值：
     adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
