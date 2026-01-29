@@ -14,8 +14,8 @@
   */ 
   
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __FLASH_H__
-#define __FLASH_H__
+#ifndef __TX8C126X_FLASH_H__
+#define __TX8C126X_FLASH_H__
 
 #ifdef __cplusplus
  extern "C" {

@@ -115,35 +115,35 @@ void main(void)
     my_debug_config();
     printf("sys reset\n");
 
-    // P01 配置为输出模式
-    P0_MD0 &= ~(0x03 << 2);
-    P0_MD0 |= 0x01 << 2;
-    FOUT_S01 = GPIO_FOUT_AF_FUNC;
-    P01 = 0;
+    // // P01 配置为输出模式
+    // P0_MD0 &= ~(0x03 << 2);
+    // P0_MD0 |= 0x01 << 2;
+    // FOUT_S01 = GPIO_FOUT_AF_FUNC;
+    // P01 = 0;
 
-    // P02 配置为输出模式
-    P0_MD0 &= ~(0x03 << 4); // 清空对应的寄存器配置
-    P0_MD0 |= 0x01 << 4;    // 输出模式
-    FOUT_S02 = GPIO_FOUT_AF_FUNC;
-    P02 = 0;
+    // // P02 配置为输出模式
+    // P0_MD0 &= ~(0x03 << 4); // 清空对应的寄存器配置
+    // P0_MD0 |= 0x01 << 4;    // 输出模式
+    // FOUT_S02 = GPIO_FOUT_AF_FUNC;
+    // P02 = 0;
 
-    // P05 配置为输出模式
-    P0_MD1 &= ~(0x03 << 2);
-    P0_MD1 |= 0x01 << 2;
-    FOUT_S05 = GPIO_FOUT_AF_FUNC;
-    P05 = 0;
+    // // P05 配置为输出模式
+    // P0_MD1 &= ~(0x03 << 2);
+    // P0_MD1 |= 0x01 << 2;
+    // FOUT_S05 = GPIO_FOUT_AF_FUNC;
+    // P05 = 0;
 
-    // P06 配置为输出模式
-    P0_MD1 &= ~(0x03 << 4);
-    P0_MD1 |= 0x01 << 4;
-    FOUT_S06 = GPIO_FOUT_AF_FUNC;
-    P06 = 0;
+    // // P06 配置为输出模式
+    // P0_MD1 &= ~(0x03 << 4);
+    // P0_MD1 |= 0x01 << 4;
+    // FOUT_S06 = GPIO_FOUT_AF_FUNC;
+    // P06 = 0;
 
-    // P21 配置为输出模式
-    P2_MD0 &= ~(0x03 << 2);
-    P2_MD0 |= 0x01 << 2; // 输出模式
-    FOUT_S21 = GPIO_FOUT_AF_FUNC;
-    P21 = 0;
+    // // P21 配置为输出模式
+    // P2_MD0 &= ~(0x03 << 2);
+    // P2_MD0 |= 0x01 << 2; // 输出模式
+    // FOUT_S21 = GPIO_FOUT_AF_FUNC;
+    // P21 = 0;
 
     // 输出模式：
     // P1_MD0 &= (GPIO_P13_MODE_SEL(0x3));
@@ -234,13 +234,12 @@ void main(void)
     }
 #endif // 开机缓慢启动（PWM信号变化平缓）
 
-
-    power_on_handle();
+    power_on_handle(); // 新版的开机缓启动
 
     // 缓启动后，立即更新 adjust_duty 的值：
-    adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
-    adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
-    flag_is_in_power_on = 0; // 表示退出了开机缓启动
+    // adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
+    // adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
+    // flag_is_in_power_on = 0; // 表示退出了开机缓启动
     // ===================================================================
 
     while (1)
@@ -269,35 +268,6 @@ void main(void)
         // 风扇控制：
         fan_ctl();
 #endif
-
-        // P02 = ~P02; // 测试主循环一轮所需时间
-
-        // 测试用：
-        // {
-        //     static u16 cnt = 0;
-        //     cnt++;
-
-        //     // if (cnt >= 10)
-        //     if (cnt >= 100)
-        //     {
-        //         cnt = 0;
-        //         // printf("expect_adjust_pwm_channel_0_duty: %u\n", expect_adjust_pwm_channel_0_duty);
-        //         // printf("expect_adjust_pwm_channel_1_duty: %u\n", expect_adjust_pwm_channel_1_duty);
-        //         // printf("adjust_pwm_channel_0_duty: %u\n", adjust_pwm_channel_0_duty);
-        //         // printf("adjust_pwm_channel_1_duty: %u\n", adjust_pwm_channel_1_duty);
-        //         // printf("cur_pwm_channel_0_duty: %u\n", cur_pwm_channel_0_duty);
-        //         // printf("cur_pwm_channel_1_duty: %u\n", cur_pwm_channel_1_duty);
-
-        //         // printf("__LINE__ %u\n", __LINE__);
-        //         // printf("val %u\n", ADC_OVER_DRIVE_VAL);
-        //         // printf("val %u\n", (u16)adc_val_from_fan);
-        //         // printf("val %u\n", (u16)adc_val_from_temp);
-        //         // printf("val %u\n", (u16)adc_val_from_knob);
-        //         // printf("val %u\n", (u16)adc_val_from_engine);
-
-        //         // P02 = ~P02;
-        //     }
-        // }
     }
 }
 

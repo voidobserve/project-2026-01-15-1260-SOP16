@@ -143,10 +143,11 @@ void pwm_channel_0_enable(void)
 
 void pwm_channel_0_disable(void)
 {
-    // 直接输出0%的占空比，可能会有些跳动，需要将对应的引脚配置回输出模式
-    STMR_PWMEN &= ~0x01;          // 不使能PWM0的输出
     FOUT_S16 = GPIO_FOUT_AF_FUNC; //
     P16 = 1;                      // 高电平为关灯
+
+    // 直接输出0%的占空比，可能会有些跳动，需要将对应的引脚配置回输出模式
+    STMR_PWMEN &= ~0x01; // 不使能PWM0的输出
 }
 
 void pwm_channel_1_enable(void)
@@ -163,9 +164,6 @@ void pwm_channel_1_enable(void)
 
 void pwm_channel_1_disable(void)
 {
-    // 直接输出0%的占空比，可能会有些跳动，需要将对应的引脚配置回输出模式
-    STMR_PWMEN &= ~(0x01 << 1); // 不使能PWM1的输出
-
 #if USE_MY_TEST_PIN
     FOUT_S05 = GPIO_FOUT_AF_FUNC; //;
     P05 = 1;                      // 高电平为关灯
@@ -173,6 +171,9 @@ void pwm_channel_1_disable(void)
     FOUT_S15 = GPIO_FOUT_AF_FUNC; //
     P15 = 1;                      // 高电平为关灯
 #endif
+
+    // 直接输出0%的占空比，可能会有些跳动，需要将对应的引脚配置回输出模式
+    STMR_PWMEN &= ~(0x01 << 1); // 不使能PWM1的输出
 }
 
 /**

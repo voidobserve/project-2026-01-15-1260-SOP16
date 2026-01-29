@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   POWER_ON                                                          01/24/2026 18:06:45 PAGE 1   
+C51 COMPILER V9.60.7.0   POWER_ON                                                          01/29/2026 18:00:37 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE POWER_ON
@@ -13,61 +13,62 @@ line level    source
    2          #include "include.h"
    3          #include "pwm.h"
    4          #include <math.h>
-   5           
-   6          
-   7          volatile bit flag_is_in_power_on = 0; // 是否处于开机缓启动
-   8          static volatile u32 power_on_step = 0;
-   9          volatile bit flag_time_comes_during_power_on = 0; // 标志位，开机缓启动期间，调节时间到�
+   5          
+   6          volatile bit flag_is_in_power_on = 0; // 是否处于开机缓启动
+   7          static volatile u32 power_on_step = 0;
+   8          volatile bit flag_time_comes_during_power_on = 0; // 标志位，开机缓启动期间，调节时间到�
              -�（由定时器置位）
-  10            
-  11          void power_on_handle(void)
-  12          { 
-  13   1          cur_pwm_channel_0_duty = 0;
-  14   1          cur_pwm_channel_1_duty = 0;
-  15   1          flag_is_in_power_on = 1; // 表示到了开机缓启动
-  16   1      
-  17   1          while (1)
-  18   1          {
-  19   2      #if USE_MY_DEBUG // 直接打印0，防止在串口+图像上看到错位
+   9          
+  10          void power_on_handle(void)
+  11          {
+  12   1          cur_pwm_channel_0_duty = 0;
+  13   1          cur_pwm_channel_1_duty = 0;
+  14   1          flag_is_in_power_on = 1; // 表示到了开机缓启动
+  15   1      
+  16   1          while (1)
+  17   1          {
+  18   2      #if USE_MY_DEBUG // 直接打印0，防止在串口+图像上看到错位
                                // printf(",b=0,"); // 防止在串口图像错位
               #endif
-  22   2              if (cur_pwm_channel_0_duty >= DEST_POWER_ON_DUTY_VAL &&
-  23   2                  cur_pwm_channel_1_duty >= DEST_POWER_ON_DUTY_VAL)
-  24   2              {
-  25   3                  // 当两路pwm都到对应的占空比值之后，才退出开机缓启动
-  26   3                  break;
-  27   3              }
-  28   2      
-  29   2              if (flag_time_comes_during_power_on) // 如果调节时间到来
-  30   2              {
-  31   3                  flag_time_comes_during_power_on = 0;
-  32   3                  power_on_step += POWER_ON_ADJUST_STEP; // 累计步长
-  33   3                  if (power_on_step >= 1000)
-  34   3                  {
-  35   4                      power_on_step -= 1000;
-  36   4                      cur_pwm_channel_0_duty++;
-  37   4                      cur_pwm_channel_1_duty = cur_pwm_channel_0_duty;
-  38   4                  }
-  39   3              }
-  40   2      
-  41   2              set_pwm_channel_0_duty(cur_pwm_channel_0_duty);
-  42   2              set_pwm_channel_1_duty(cur_pwm_channel_1_duty);
-  43   2          }
-  44   1      
-  45   1          // 缓启动后，立即更新 adjust_duty 的值：（ 要给下面这些变量赋值，上电后会�
+  21   2              update_max_pwm_duty_coefficient();
+  22   2      
+  23   2              if (cur_pwm_channel_0_duty >= limited_max_pwm_duty &&
+  24   2                  cur_pwm_channel_1_duty >= limited_max_pwm_duty)
+  25   2              {
+  26   3                  // 当两路pwm都到对应的占空比值之后，才退出开机缓启动
+  27   3                  break;
+  28   3              }
+  29   2      
+  30   2              if (flag_time_comes_during_power_on) // 如果调节时间到来
+  31   2              {
+  32   3                  flag_time_comes_during_power_on = 0;
+  33   3                  power_on_step += POWER_ON_ADJUST_STEP; // 累计步长
+  34   3                  if (power_on_step >= 1000)
+  35   3                  {
+  36   4                      power_on_step -= 1000;
+  37   4                      cur_pwm_channel_0_duty++;
+  38   4                      cur_pwm_channel_1_duty = cur_pwm_channel_0_duty;
+  39   4                  }
+  40   3              }
+  41   2      
+  42   2              set_pwm_channel_0_duty(cur_pwm_channel_0_duty);
+  43   2              set_pwm_channel_1_duty(cur_pwm_channel_1_duty);
+  44   2          }
+  45   1      
+  46   1          // 缓启动后，立即更新 adjust_duty 的值：（ 要给下面这些变量赋值，上电后会�
              -��据这些变量的值来调节 ）
-  46   1          adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
-  47   1          adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
-  48   1          expect_adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
-  49   1          expect_adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
-  50   1          flag_is_in_power_on = 0; // 表示退出了开机缓启动
-  51   1      }
-C51 COMPILER V9.60.7.0   POWER_ON                                                          01/24/2026 18:06:45 PAGE 2   
+  47   1          adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
+  48   1          adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
+  49   1          expect_adjust_pwm_channel_0_duty = cur_pwm_channel_0_duty;
+  50   1          expect_adjust_pwm_channel_1_duty = cur_pwm_channel_1_duty;
+  51   1          flag_is_in_power_on = 0; // 表示退出了开机缓启动
+C51 COMPILER V9.60.7.0   POWER_ON                                                          01/29/2026 18:00:37 PAGE 2   
 
+  52   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    226    ----
+   CODE SIZE        =    241    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----

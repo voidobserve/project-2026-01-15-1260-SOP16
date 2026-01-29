@@ -6,8 +6,9 @@
 #include <stdio.h>
 
 // 周期值 == 系统时钟 / 预分频 / pwm频率，：
-// #define STMR_ALL_PERIOD_VAL (SYSCLK / 1 / 8000) // 旧版和做过货的版本，这里的值都是6000，之后的修改要尽量保持在6000，否则会对调节有影响
-#define STMR_ALL_PERIOD_VAL (SYSCLK / 1 / 24000) // 旧版和做过货的版本，这里的值都是6000，之后的修改要尽量保持在6000，否则会对调节有影响
+// 旧版和做过货的版本，这里的值都是6000，之后的修改要尽量保持在6000，否则会对调节有影响
+// #define STMR_ALL_PERIOD_VAL (SYSCLK / 1 / 8000) // 
+#define STMR_ALL_PERIOD_VAL (SYSCLK / 1 / 32000) // 
 #define STMR0_PEROID_VAL (STMR_ALL_PERIOD_VAL)
 #define STMR1_PEROID_VAL (STMR_ALL_PERIOD_VAL)
 

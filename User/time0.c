@@ -1,11 +1,10 @@
 #include "time0.h"
-
-#include "pwm.h"
+#include "power_on.h"
 
 // u8 ms_cnt = 0;
 // volatile bit tmr0_flag = 0;
 
-static volatile u8 cnt_during_power_on = 0; // 开机缓启动，调节pwm占空比时，使用到的计数值
+// static volatile u8 cnt_during_power_on = 0; // 开机缓启动，调节pwm占空比时，使用到的计数值
 // volatile bit flag_time_comes_during_power_on = 0; // 标志位，开机缓启动期间，调节时间到来
 
 /**
@@ -75,7 +74,7 @@ void TIMR0_IRQHandler(void) interrupt TMR0_IRQn
         //     flag_time_comes_during_power_on = 1; // 开机缓启动期间，控制每次调节PWM占空比的时间
         // }
 
-        flag_time_comes_during_power_on = 1;
+        flag_time_comes_during_power_on = 1; // 开机缓启动期间，控制每次调节PWM占空比的时间
 
         if (rf_key_para.cur_scan_times < 255)
         {
@@ -126,37 +125,7 @@ void TIMR0_IRQHandler(void) interrupt TMR0_IRQn
                     cur_fan_status = FAN_STATUS_NORMAL;
                 }
             }
-        } // 风扇状态检测，累计一段时间后更新状态
-
-        // {
-        //     static volatile u32 cnt = 0;
-
-        //     if (TEMP_75 == temp_status)
-        //     {
-        //         cnt++;
-        //         if (cnt >= (u32)TMR1_CNT_5_MINUTES)
-        //         {
-
-        //         }
-        //     }
-        // }
-
-        { // 用于上电多久之后，限制PWM最大的占空比
-            static u32 cnt = 0;
-            if (0 == flag_is_time_to_limit_pwm)
-            {
-                /*
-                    如果没有到到限制占空比的时间（标志位不为1）
-                    则进行计时
-                */
-                cnt++;
-                if (cnt >= SCHEDULE_TIME_TO_LIMIT_PWM)
-                {
-                    cnt = 0;
-                    flag_is_time_to_limit_pwm = 1;
-                }
-            }
-        }
+        } // 风扇状态检测，累计一段时间后更新状态      
     }
 
     // 退出中断设置IP，不可删除

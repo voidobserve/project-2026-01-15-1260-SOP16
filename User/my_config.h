@@ -1,5 +1,5 @@
-#ifndef __MY_CONFIG_H
-#define __MY_CONFIG_H
+#ifndef __MY_CONFIG_H__
+#define __MY_CONFIG_H__
 
 #include "include.h" // 芯片官方提供的头文件
 

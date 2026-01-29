@@ -1,5 +1,5 @@
-#ifndef __RF_RECV_H
-#define __RF_RECV_H
+#ifndef __RF_RECV_H__
+#define __RF_RECV_H__
 
 #include "my_config.h"
 #include "key_driver.h"

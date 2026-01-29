@@ -1,5 +1,5 @@
-#ifndef __FLASH_H
-#define __FLASH_H
+#ifndef __FLASH_H__
+#define __FLASH_H__
 
 #include "my_config.h"
 #include "include.h"

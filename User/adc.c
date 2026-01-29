@@ -9,6 +9,11 @@ volatile u16 adc_val_from_knob;   // 存放 从旋钮一侧 采集到的ad值
 volatile u16 adc_val_from_temp;   // 存放 从热敏电阻一侧 采集到的ad值
 volatile u16 adc_val_from_fan;    // 存放 检测风扇一侧 采集到的ad值
 
+// volatile u16 adc_val_from_engine = 4095; // 存放 从发动机一侧 采集到的ad值
+// volatile u16 adc_val_from_knob = 4095;   // 存放 从旋钮一侧 采集到的ad值
+// volatile u16 adc_val_from_temp = 4096;   // 存放 从热敏电阻一侧 采集到的ad值
+// volatile u16 adc_val_from_fan = 4096;    // 存放 检测风扇一侧 采集到的ad值
+
 volatile bit flag_tim_scan_fan_is_err = 0;      // 标志位，由定时器扫描并累计时间，表示当前风扇是否异常
 volatile u8 cur_fan_status = FAN_STATUS_NORMAL; // 当前风扇状态
 
@@ -94,7 +99,7 @@ void adc_channel_sel(u8 adc_sel_pin)
                    ADC_EXT_SEL(0x0);       // 选择外部通道
     }
     break;
-
+        // =================================================================================================
     case ADC_SEL_PIN_FAN:
     {
         ADC_ACON1 &= ~(ADC_VREF_SEL(0x7) | ADC_EXREF_SEL(0x01) | ADC_INREF_SEL(0)); // 关闭外部参考电压，不选择外部参考，清除选择的参考电压
@@ -108,7 +113,7 @@ void adc_channel_sel(u8 adc_sel_pin)
                    ADC_EXT_SEL(0x0);       // 选择外部通道
     }
     break;
-
+        // =================================================================================================
     default:
         break;
     }
@@ -244,7 +249,7 @@ void set_duty(void)
     {
         limited_pwm_duty_due_to_temp = PWM_DUTY_25_PERCENT; // 将pwm占空比限制到最大占空比的 25%
     }
-} 
+}
 
 void fan_scan(void)
 {
