@@ -7,7 +7,6 @@
 */
 #define FILTER_BUFF_SIZE 32
 #define FILTER_BUFF_2_SIZE 270 // 270 -- 对应 5.83ms 执行一次的函数 according_pin9_to_adjust_pwm，时间越短，数组需要加大
-// #define FILTER_BUFF_2_SIZE 540 // 540 -- 对应 2.93ms 执行一次的函数 according_pin9_to_adjust_pwm，时间越短，数组需要加大
 static volatile u16 t_count = 0;
 static volatile u16 t_adc_max = 0;    // 存放一段时间内采集到的最大ad值
 static volatile u16 t_adc_min = 4096; // 存放一段时间内采集到的最小ad值
@@ -38,6 +37,11 @@ void according_pin9_to_adjust_pwm(void)
 
     volatile u32 adc_pin_9_avg = 0;             // 存放平均值
     volatile u16 adc_val = adc_val_from_engine; // adc_val_from_engine 由adc中断更新
+    if (adc_val == U16_MAX_VAL)
+    {
+        // 没有采集到ad值，ad值还是初始的U16_MAX_VAL，不处理，函数直接返回
+        return;
+    }
 
     if (filter_buff[0] == 0xFFFF) // 如果是第一次检测，让数组内所有元素都变为第一次采集的数据，方便快速作出变化
     {

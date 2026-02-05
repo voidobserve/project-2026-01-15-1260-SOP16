@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
                   // P1_MD0 |= GPIO_P13_MODE_SEL(0x1);            // 配置为输出模式
                   // FOUT_S13 |= GPIO_FOUT_UART0_TX;              // 配置为UART0_TX
                   // UART0_BAUD1 = (USER_UART0_BAUD >> 8) & 0xFF; // 配置波特率高八位
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 2   
 
                   // UART0_BAUD0 = USER_UART0_BAUD & 0xFF;        // 配置波特率低八位
                   // UART0_CON0 = UART_STOP_BIT(0x0) |
@@ -126,7 +126,7 @@ line level    source
  109   1          IO_MAP &= ~0x01; // 清除这个寄存器的值，实现关闭HCK和HDA引脚的调试功能（解除�
              -��射）
  110   1          WDT_KEY = 0xBB;  // 写一个无效的数据，触发写保护
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 3   
 
  111   1      
  112   1      #if USE_MY_DEBUG // 打印串口配置
@@ -190,7 +190,7 @@ line level    source
  170   1          limited_pwm_duty_due_to_fan_err = MAX_PWM_DUTY;
  171   1          limited_pwm_duty_due_to_temp = MAX_PWM_DUTY;
  172   1          limited_pwm_duty_due_to_unstable_engine = MAX_PWM_DUTY;
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 4   
 
  173   1      
  174   1      // ===================================================================
@@ -254,7 +254,7 @@ line level    source
                       set_pwm_channel_1_duty(cur_pwm_channel_1_duty);
                       // set_pwm_duty(); // 将 c_duty 写入pwm对应的寄存器
                       // set_p15_pwm_duty(c_duty);
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 5   
 
               
               #if USE_MY_DEBUG
@@ -318,7 +318,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.60.7.0   MAIN                                                              01/29/2026 18:00:36 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/05/2026 15:20:23 PAGE 6   
 
 END OF MODULE INFORMATION.
 

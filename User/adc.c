@@ -4,23 +4,20 @@
 // 存放温度状态的变量
 volatile u8 temp_status = TEMP_NORMAL;
 
-volatile u16 adc_val_from_engine; // 存放 从发动机一侧 采集到的ad值
-volatile u16 adc_val_from_knob;   // 存放 从旋钮一侧 采集到的ad值
-volatile u16 adc_val_from_temp;   // 存放 从热敏电阻一侧 采集到的ad值
-volatile u16 adc_val_from_fan;    // 存放 检测风扇一侧 采集到的ad值
+// volatile u16 adc_val_from_engine; // 存放 从发动机一侧 采集到的ad值
+// volatile u16 adc_val_from_knob;   // 存放 从旋钮一侧 采集到的ad值
+// volatile u16 adc_val_from_temp;   // 存放 从热敏电阻一侧 采集到的ad值
+// volatile u16 adc_val_from_fan;    // 存放 检测风扇一侧 采集到的ad值
 
-// volatile u16 adc_val_from_engine = 4095; // 存放 从发动机一侧 采集到的ad值
-// volatile u16 adc_val_from_knob = 4095;   // 存放 从旋钮一侧 采集到的ad值
-// volatile u16 adc_val_from_temp = 4096;   // 存放 从热敏电阻一侧 采集到的ad值
-// volatile u16 adc_val_from_fan = 4096;    // 存放 检测风扇一侧 采集到的ad值
+volatile u16 adc_val_from_engine = U16_MAX_VAL; // 存放 从发动机一侧 采集到的ad值
+volatile u16 adc_val_from_knob = U16_MAX_VAL;   // 存放 从旋钮一侧 采集到的ad值
+volatile u16 adc_val_from_temp = U16_MAX_VAL;   // 存放 从热敏电阻一侧 采集到的ad值
+volatile u16 adc_val_from_fan = U16_MAX_VAL;    // 存放 检测风扇一侧 采集到的ad值
 
 volatile bit flag_tim_scan_fan_is_err = 0;      // 标志位，由定时器扫描并累计时间，表示当前风扇是否异常
 volatile u8 cur_fan_status = FAN_STATUS_NORMAL; // 当前风扇状态
 
 volatile u8 cur_adc_status = ADC_STATUS_NONE; // 状态机，表示当前adc的状态
-
-volatile u8 adc_engine_val_buff_index = 0;
-volatile u16 adc_engine_val_buff[16] = {0xFFFF};
 
 // adc相关的引脚配置
 void adc_pin_config(void)
@@ -152,6 +149,11 @@ void temperature_scan(void)
     }
 
     voltage = get_voltage_from_pin(); // 得到热敏电阻上的电压
+    if (voltage >= (u32)U16_MAX_VAL * 12 / 10)
+    {
+        // 没有采集到ad值，ad值还是初始的U16_MAX_VAL，不处理，函数直接返回
+        return;
+    }
 
 #if USE_MY_DEBUG
     // printf("PIN-8 voltage: %lu mV\n", voltage);
@@ -254,6 +256,11 @@ void set_duty(void)
 void fan_scan(void)
 {
     u16 adc_val = adc_val_from_fan; // adc_val_from_fan 由adc中断触发
+    if (adc_val == U16_MAX_VAL)
+    {
+        // 没有采集到ad值，ad值还是初始的U16_MAX_VAL，不处理，函数直接返回
+        return;
+    }
 
     /*
         1脚电压低于4.3V时，14，15脚输出25%占空比，

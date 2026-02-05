@@ -25,6 +25,8 @@
 
 #define ARRAY_SIZE(n) (sizeof(n) / sizeof(n[0]))
 
+#define U16_MAX_VAL ((u16)0xFFFF)
+
 // tmr1配置成每10ms产生一次中断，计数值加一，
 // 这里定义时间对应的计数值
 // #define TMR1_CNT_30_MINUTES 180000UL // 30min（这个是可以在30min后调节PWM占空比的）

@@ -13,8 +13,13 @@ void update_max_pwm_duty_coefficient(void)
         相当于给关机和开机之间划一个较大的死区
     */
     static bit flag_is_last_limited_equal_zero = 0;
- 
+
     volatile u16 adc_val = adc_val_from_knob; // adc_val_from_knob 由adc中断更新
+    if (adc_val == U16_MAX_VAL)
+    {
+        // 没有采集到ad值，ad值还是初始的U16_MAX_VAL，不处理，函数直接返回
+        return;
+    }
 
     // 它闪灯可能是因为功率太低，也可能是检测脚的波动，导致单片机触发了频繁开灯关灯的操作
     // 方法1：试着加大调光那里的电容，提供一个缓冲
